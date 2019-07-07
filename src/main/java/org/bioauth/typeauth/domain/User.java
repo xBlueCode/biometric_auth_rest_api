@@ -37,14 +37,12 @@ public class User {
 	)
 	private Set<Client> clients = new HashSet<>();
 
-	/*
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			joinColumns = @JoinColumn(name = "USER_ID"),
 			inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
 	)
 	private Set<Role> roles;
-	*/
 
 	public void	addClient(Client client)
 	{
