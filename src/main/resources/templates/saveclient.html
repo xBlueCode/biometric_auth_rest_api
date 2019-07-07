@@ -1,0 +1,39 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API Dashboard</title>
+</head>
+<body>
+
+<h2>Dashboard</h2>
+
+<h4>Add new Client</h4>
+
+<form action="#" th:action="@{/api/client}" th:method="post" th:object="${client}">
+    <table>
+        <tr>
+            <td><label th:text="Username"></label> </td>
+            <td><input type="text" th:field="*{name}"></td>
+        </tr>
+        <tr>
+            <td><label >Total Elapsed Time (ms)</label> </td>
+            <td><input type="number" th:field="*{totalElapsedTime}"></td>
+        </tr>
+        <tr>
+            <td><label >Total Key-Pressed Time (ms)</label> </td>
+            <td><input type="number" th:field="*{totalPressTime}"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Submit"></td>
+        </tr>
+    </table>
+</form>
+
+<a href="/">Back to main page</a>
+
+</body>
+</html>
