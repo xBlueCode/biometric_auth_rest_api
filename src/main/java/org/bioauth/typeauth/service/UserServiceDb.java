@@ -4,6 +4,8 @@ import org.bioauth.typeauth.domain.Client;
 import org.bioauth.typeauth.domain.User;
 import org.bioauth.typeauth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +54,14 @@ public class UserServiceDb implements UserService {
 		User user = opUser.get();
 		user.getClients().add(client);
 		userRepository.saveAndFlush(user);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Optional<User> opUser = userRepository.findUserByUsername(username);
+		if (!opUser.isPresent())
+			throw new UsernameNotFoundException(username);
+		else
+			return opUser.get();
 	}
 }

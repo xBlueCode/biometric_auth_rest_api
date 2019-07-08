@@ -1,5 +1,6 @@
 package org.bioauth.typeauth.config;
 
+import org.bioauth.typeauth.service.UserServiceDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,9 +23,8 @@ import java.security.AuthProvider;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
 	@Autowired
-	private UserDetailsServiceImp userDetailsServiceImp;
+	private UserServiceDb userDetailsService;
 
 	@Bean
 	PasswordEncoder passwordEncoder()
@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	DaoAuthenticationProvider daoAuthenticationProvider()
 	{
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-		daoAuthenticationProvider.setUserDetailsService(userDetailsServiceImp);
+		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
 		return daoAuthenticationProvider;
 	}
