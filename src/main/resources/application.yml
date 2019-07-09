@@ -10,3 +10,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         ddl-auto: update
+security:
+  oauth2:
+    resource:
+      jwt:
+        key-value: bioauthtyping
