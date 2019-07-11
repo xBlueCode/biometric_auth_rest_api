@@ -32,7 +32,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		super.configure(http);
+		//super.configure(http);
+
+		http.authorizeRequests().antMatchers("/login").permitAll()
+		.anyRequest().authenticated()
+		.and()
+		.formLogin()
 		//http
 				//.authorizeRequests()
 				//.antMatchers("/oauth/*").permitAll()

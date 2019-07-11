@@ -43,7 +43,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 				.withClient("client1")
 				.secret(passwordEncoder.encode("cpass1"))
 				.scopes("read")
-				.authorizedGrantTypes("password")
+				.authorizedGrantTypes(AuthorizationGrantType.CLIENT_CREDENTIALS.getValue())
 				.accessTokenValiditySeconds(300);
 	}
 

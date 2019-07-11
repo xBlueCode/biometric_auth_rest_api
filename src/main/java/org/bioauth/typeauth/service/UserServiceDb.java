@@ -1,6 +1,6 @@
 package org.bioauth.typeauth.service;
 
-import org.bioauth.typeauth.domain.Client;
+import org.bioauth.typeauth.domain.Person;
 import org.bioauth.typeauth.domain.User;
 import org.bioauth.typeauth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +46,13 @@ public class UserServiceDb implements UserService {
 	}
 
 	@Override
-	public void addClientToUser(String username, Client client) {
+	public void addClientToUser(String username, Person person) {
 
 		Optional<User> opUser = userRepository.findUserByUsername(username);
 		if (!opUser.isPresent())
 			return;
 		User user = opUser.get();
-		user.getClients().add(client);
+		user.getPeople().add(person);
 		userRepository.saveAndFlush(user);
 	}
 

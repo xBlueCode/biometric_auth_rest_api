@@ -66,11 +66,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		//super.configure(http);
-		http
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
-				.authorizeRequests()
-				.antMatchers("/oauth/*").permitAll()
+		//http
+				//.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				//.and()
 				//.authorizeRequests()
 				//.anyRequest().permitAll();
@@ -79,6 +76,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				//.antMatchers("/register").permitAll()
 				//.antMatchers("/api/**").permitAll()
 				//.anyRequest().authenticated()
+				//.and()
+				//.authorizeRequests().anyRequest().authenticated()
 				//.and()
 				//.formLogin()
 				//.defaultSuccessUrl("/dashboard", true)

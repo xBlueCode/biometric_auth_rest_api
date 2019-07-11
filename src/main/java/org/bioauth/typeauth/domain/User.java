@@ -2,7 +2,6 @@ package org.bioauth.typeauth.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +37,7 @@ public class User implements UserDetails {
 			joinColumns = @JoinColumn(name = "USER_ID"),
 			inverseJoinColumns = @JoinColumn(name = "CLIENT_ID")
 	)
-	private Set<Client> clients = new HashSet<>();
+	private Set<Person> people = new HashSet<>();
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
@@ -47,9 +46,9 @@ public class User implements UserDetails {
 	)
 	private Set<Role> roles;
 
-	public void	addClient(Client client)
+	public void	addClient(Person person)
 	{
-		clients.add(client);
+		people.add(person);
 	}
 
 	@Override
