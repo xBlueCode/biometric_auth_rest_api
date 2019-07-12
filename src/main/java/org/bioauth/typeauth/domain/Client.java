@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "client")
+//@Table(name = "client")
 public class Client implements ClientDetails {
 
 	@Id
@@ -36,28 +36,28 @@ public class Client implements ClientDetails {
 	@NotNull
 	private Integer accessTokenValiditySeconds;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			joinColumns = @JoinColumn(name = "CLIENT_ID"),
 			inverseJoinColumns = @JoinColumn(name = "SCOPE_ID")
 	)
 	private Set<Scope> scopes = new HashSet<>();
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			joinColumns = @JoinColumn(name = "CLIENT_ID"),
 			inverseJoinColumns = @JoinColumn(name = "AUTH_GRANT_TYPE_ID")
 	)
 	private Set<AuthGrantType> authGrantTypes = new HashSet<>();
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			joinColumns = @JoinColumn(name = "CLIENT_ID"),
 			inverseJoinColumns = @JoinColumn(name = "GRANTED_AUTHORITY_CLIENT_ID")
 	)
 	private Set<GrantedAuthorityClient> grantedAuthorities = new HashSet<>();
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			joinColumns = @JoinColumn(name = "CLIENT_ID"),
 			inverseJoinColumns = @JoinColumn(name = "RESOURCE_ID")

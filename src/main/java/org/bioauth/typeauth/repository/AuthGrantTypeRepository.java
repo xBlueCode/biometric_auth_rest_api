@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AuthGrantTypeRepository extends JpaRepository<AuthGrantType, Integer> {
+
+	AuthGrantType findAuthGrantTypeByType(String type);
 }

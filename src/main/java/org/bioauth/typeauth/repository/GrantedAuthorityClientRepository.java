@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GrantedAuthorityClientRepository extends JpaRepository<GrantedAuthorityClient, Integer> {
+
+	GrantedAuthorityClient findGrantedAuthorityClientByAuthority(String authority);
+
 }
