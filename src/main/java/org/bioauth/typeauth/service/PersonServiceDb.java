@@ -18,8 +18,8 @@ public class PersonServiceDb implements PersonService {
 	}
 
 	@Override
-	public Optional<Person> findClientByName(String name) {
-		return personRepository.findClientByName(name);
+	public Optional<Person> findPersonByName(String name) {
+		return personRepository.findPersonByName(name);
 	}
 
 	@Override

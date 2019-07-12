@@ -16,27 +16,28 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/client")
-public class ClientController {
+public class PersonController {
 
-	private PersonServiceDb clientServiceDb;
+	private PersonServiceDb PersonServiceDb;
 	private UserServiceDb userServiceDb;
 
 	@Autowired
-	public ClientController(PersonServiceDb clientServiceDb, UserServiceDb userServiceDb) {
-		this.clientServiceDb = clientServiceDb;
+	public PersonController(PersonServiceDb clientServiceDb, UserServiceDb userServiceDb) {
+		this.PersonServiceDb = clientServiceDb;
 		this.userServiceDb = userServiceDb;
 	}
 
+	/*
 	@GetMapping()
 	public @ResponseBody String checkClient(@RequestParam("name") String name)
 	{
-		Optional<Person> optionalClient = clientServiceDb.findClientByName(name);
+		Optional<Person> optionalClient = PersonServiceDb.findPersonByName(name);
 		if (optionalClient.isPresent())
 			return optionalClient.get().toString();
 		else
 			return "Client Not found";
 	}
-
+*/
 	/*
 	@PostMapping("/save")
 	public @ResponseBody String saveClient(@PathParam("name") String name)
@@ -54,6 +55,7 @@ public class ClientController {
 	}
 	*/
 
+	/*
 	@GetMapping("/save")
 	public String showSaveClient(Model model)
 	{
@@ -71,9 +73,11 @@ public class ClientController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!auth.isAuthenticated())
 			return "User not Authenticated !";
-		clientServiceDb.save(person);
+		PersonServiceDb.save(person);
 		String username = ((UserDetails)auth.getPrincipal()).getUsername();
 		userServiceDb.addClientToUser(username, person);
 		return "dashboard";
 	}
+
+	 */
 }

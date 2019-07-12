@@ -45,6 +45,7 @@ public class UserServiceDb implements UserService {
 		return userRepository.findUserByUsername(username);
 	}
 
+	/*
 	@Override
 	public void addClientToUser(String username, Person person) {
 
@@ -55,6 +56,7 @@ public class UserServiceDb implements UserService {
 		user.getPeople().add(person);
 		userRepository.saveAndFlush(user);
 	}
+	*/
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

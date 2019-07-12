@@ -16,6 +16,8 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import java.util.Collections;
+
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -42,7 +44,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		clients.inMemory()
 				.withClient("client1")
 				.secret(passwordEncoder.encode("cpass1"))
-				.scopes("read")
+				.scopes("manage")
 				.authorizedGrantTypes(AuthorizationGrantType.CLIENT_CREDENTIALS.getValue())
 				.accessTokenValiditySeconds(300);
 	}
