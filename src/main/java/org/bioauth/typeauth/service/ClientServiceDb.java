@@ -3,6 +3,7 @@ package org.bioauth.typeauth.service;
 import org.bioauth.typeauth.domain.Client;
 import org.bioauth.typeauth.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.stereotype.Service;
@@ -11,14 +12,17 @@ import org.springframework.stereotype.Service;
 public class ClientServiceDb implements ClientService{
 
 	private ClientRepository clientRepository;
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public ClientServiceDb(ClientRepository clientRepository) {
+	public ClientServiceDb(ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
 		this.clientRepository = clientRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	public void save(Client client) {
+		client.setClientSecret(passwordEncoder.encode(client.getClientSecret()));
 		clientRepository.save(client);
 	}
 
