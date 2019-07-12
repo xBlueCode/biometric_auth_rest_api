@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/api/client")
+@RequestMapping("/api/person")
 public class PersonController {
 
 	private PersonServiceDb PersonServiceDb;
 	private UserServiceDb userServiceDb;
 
 	@Autowired
-	public PersonController(PersonServiceDb clientServiceDb, UserServiceDb userServiceDb) {
-		this.PersonServiceDb = clientServiceDb;
+	public PersonController(PersonServiceDb personServiceDb, UserServiceDb userServiceDb) {
+		this.PersonServiceDb = personServiceDb;
 		this.userServiceDb = userServiceDb;
 	}
 

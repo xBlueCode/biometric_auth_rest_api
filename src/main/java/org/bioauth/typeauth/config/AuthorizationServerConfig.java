@@ -1,11 +1,13 @@
 package org.bioauth.typeauth.config;
 
+import org.bioauth.typeauth.service.ClientServiceDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.builders.ClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -29,6 +31,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private ClientServiceDb clientServiceDb;
+
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		//super.configure(endpoints);
@@ -41,12 +46,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 	//	super.configure(clients);
+		/*
 		clients.inMemory()
 				.withClient("client1")
 				.secret(passwordEncoder.encode("cpass1"))
 				.scopes("manage")
 				.authorizedGrantTypes(AuthorizationGrantType.CLIENT_CREDENTIALS.getValue())
 				.accessTokenValiditySeconds(300);
+		 */
+		clients.withClientDetails(clientServiceDb);
 	}
 
 	@Bean

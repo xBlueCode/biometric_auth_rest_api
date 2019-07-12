@@ -20,4 +20,8 @@ public class ResourceId {
 
 	@NotEmpty
 	private String resourceId;
+
+	public ResourceId(@NotEmpty String resourceId) {
+		this.resourceId = resourceId;
+	}
 }

@@ -34,6 +34,6 @@ public class ClientServiceDb implements ClientService{
 
 	@Override
 	public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-		return null;
+		return clientRepository.findClientByClientId(clientId);
 	}
 }

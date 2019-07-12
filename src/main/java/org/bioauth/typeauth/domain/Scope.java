@@ -22,4 +22,8 @@ public class Scope {
 
 	@NotEmpty
 	private String scope;
+
+	public Scope(@NotEmpty String scope) {
+		this.scope = scope;
+	}
 }

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.stereotype.Component;
 import springfox.documentation.service.GrantType;
 
 import javax.persistence.*;
@@ -13,9 +14,11 @@ import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 @Entity
 @Data
 @NoArgsConstructor
+@Table(name = "client")
 public class Client implements ClientDetails {
 
 	@Id
@@ -30,36 +33,46 @@ public class Client implements ClientDetails {
 	@Length(min = 4)
 	private String clientSecret;
 
-	@ManyToMany
-	@JoinTable(
-			joinColumns = @JoinColumn(name = "CLIENT_ID"),
-			inverseJoinColumns = @JoinColumn(name = "SCOPE_ID")
-	)
-	private Set<Scope> scopes;
-
-	@ManyToMany
-	@JoinTable(
-			joinColumns = @JoinColumn(name = "CLIENT_ID"),
-			inverseJoinColumns = @JoinColumn(name = "AUTH_GRANT_TYPE_ID")
-	)
-	private Set<AuthGrantType> authGrantTypes;
-
 	@NotNull
 	private Integer accessTokenValiditySeconds;
 
 	@ManyToMany
 	@JoinTable(
 			joinColumns = @JoinColumn(name = "CLIENT_ID"),
+			inverseJoinColumns = @JoinColumn(name = "SCOPE_ID")
+	)
+	private Set<Scope> scopes = new HashSet<>();
+
+	@ManyToMany
+	@JoinTable(
+			joinColumns = @JoinColumn(name = "CLIENT_ID"),
+			inverseJoinColumns = @JoinColumn(name = "AUTH_GRANT_TYPE_ID")
+	)
+	private Set<AuthGrantType> authGrantTypes = new HashSet<>();
+
+	@ManyToMany
+	@JoinTable(
+			joinColumns = @JoinColumn(name = "CLIENT_ID"),
 			inverseJoinColumns = @JoinColumn(name = "GRANTED_AUTHORITY_CLIENT_ID")
 	)
-	private Set<GrantedAuthorityClient> grantedAuthorities;
+	private Set<GrantedAuthorityClient> grantedAuthorities = new HashSet<>();
 
 	@ManyToMany
 	@JoinTable(
 			joinColumns = @JoinColumn(name = "CLIENT_ID"),
 			inverseJoinColumns = @JoinColumn(name = "RESOURCE_ID")
 	)
-	private Set<ResourceId> resIds;
+	private Set<ResourceId> resIds = new HashSet<>();
+
+	public Client(@NotEmpty String clientId, @NotEmpty @Length(min = 4) String clientSecret, Set<Scope> scopes, Set<AuthGrantType> authGrantTypes, @NotNull Integer accessTokenValiditySeconds, Set<GrantedAuthorityClient> grantedAuthorities, Set<ResourceId> resIds) {
+		this.clientId = clientId;
+		this.clientSecret = clientSecret;
+		this.scopes = scopes;
+		this.authGrantTypes = authGrantTypes;
+		this.accessTokenValiditySeconds = accessTokenValiditySeconds;
+		this.grantedAuthorities = grantedAuthorities;
+		this.resIds = resIds;
+	}
 
 	@Override
 	public boolean isSecretRequired() {

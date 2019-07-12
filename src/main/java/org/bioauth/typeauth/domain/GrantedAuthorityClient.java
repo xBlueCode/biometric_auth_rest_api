@@ -20,4 +20,8 @@ public class GrantedAuthorityClient implements GrantedAuthority {
 
 	@NotEmpty
 	private String authority;
+
+	public GrantedAuthorityClient(@NotEmpty String authority) {
+		this.authority = authority;
+	}
 }

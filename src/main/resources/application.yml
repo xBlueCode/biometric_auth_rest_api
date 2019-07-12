@@ -7,9 +7,9 @@ spring:
     password: accmanager
   jpa:
     properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
 security:
   oauth2:
     resource:
