@@ -28,6 +28,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 	//	super.configure(resources);
 		resources.tokenServices(tokenServices);
+		resources.resourceId("res_1");
 	}
 
 	@Override
@@ -44,29 +45,4 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 				//.antMatchers("/oauth/*").permitAll()
 		;
 	}
-
-	/*
-	@Bean
-	private JwtAccessTokenConverter accessTokenConverter()
-	{
-		JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-		accessTokenConverter.setSigningKey(SIGN_KEY);
-		return accessTokenConverter;
-	}
-
-	@Bean
-	private TokenStore tokenStore()
-	{
-		return new JwtTokenStore(accessTokenConverter());
-	}
-
-	@Bean
-	private DefaultTokenServices tokenServices()
-	{
-		DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-		defaultTokenServices.setTokenStore(tokenStore());
-		//defaultTokenServices.setSupportRefreshToken(true);
-		return defaultTokenServices;
-	}
-	*/
 }
