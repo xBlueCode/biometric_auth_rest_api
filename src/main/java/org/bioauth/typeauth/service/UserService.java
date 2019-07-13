@@ -1,6 +1,5 @@
 package org.bioauth.typeauth.service;
 
-import org.bioauth.typeauth.domain.Person;
 import org.bioauth.typeauth.domain.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;

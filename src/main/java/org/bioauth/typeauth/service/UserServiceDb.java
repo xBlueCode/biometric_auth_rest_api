@@ -1,6 +1,5 @@
 package org.bioauth.typeauth.service;
 
-import org.bioauth.typeauth.domain.Person;
 import org.bioauth.typeauth.domain.User;
 import org.bioauth.typeauth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

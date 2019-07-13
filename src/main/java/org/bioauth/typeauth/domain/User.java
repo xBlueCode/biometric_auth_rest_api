@@ -37,7 +37,7 @@ public class User implements UserDetails {
 			joinColumns = @JoinColumn(name = "USER_ID"),
 			inverseJoinColumns = @JoinColumn(name = "CLIENT_ID")
 	)
-	private Set<Person> people = new HashSet<>();
+	private Set<Client> clients = new HashSet<>();
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
@@ -45,11 +45,6 @@ public class User implements UserDetails {
 			inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
 	)
 	private Set<Role> roles;
-
-	public void	addClient(Person person)
-	{
-		people.add(person);
-	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -76,3 +71,4 @@ public class User implements UserDetails {
 		return true;
 	}
 }
+

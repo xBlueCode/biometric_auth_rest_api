@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ClientService extends ClientDetailsService {
 
-	void save(Client client);
+	Client save(Client client);
 	void delete(Client client);
 	void update(Client client);
 }

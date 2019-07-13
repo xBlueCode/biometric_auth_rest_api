@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClientServiceDb implements ClientService{
+public class ClientServiceDb implements ClientService {
 
 	private ClientRepository clientRepository;
 	private PasswordEncoder passwordEncoder;
@@ -21,9 +21,9 @@ public class ClientServiceDb implements ClientService{
 	}
 
 	@Override
-	public void save(Client client) {
+	public Client save(Client client) {
 		client.setClientSecret(passwordEncoder.encode(client.getClientSecret()));
-		clientRepository.save(client);
+		return clientRepository.save(client);
 	}
 
 	@Override
