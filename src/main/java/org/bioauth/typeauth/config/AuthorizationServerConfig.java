@@ -58,14 +58,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 	//	super.configure(clients);
-		/*
-		clients.inMemory()
-				.withClient("client1")
-				.secret(passwordEncoder.encode("cpass1"))
-				.scopes("manage")
-				.authorizedGrantTypes(AuthorizationGrantType.CLIENT_CREDENTIALS.getValue())
-				.accessTokenValiditySeconds(300);
-		 */
 		clients.withClientDetails(clientServiceDb);
 	}
 }

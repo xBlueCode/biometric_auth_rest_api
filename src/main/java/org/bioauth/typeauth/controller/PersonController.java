@@ -1,83 +1,85 @@
 package org.bioauth.typeauth.controller;
 
+import org.bioauth.typeauth.config.SecurityUtilities;
+import org.bioauth.typeauth.domain.Client;
 import org.bioauth.typeauth.domain.Person;
+import org.bioauth.typeauth.service.ClientServiceDb;
 import org.bioauth.typeauth.service.PersonServiceDb;
-import org.bioauth.typeauth.service.UserServiceDb;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @Controller
-@RequestMapping("/api/person")
+@RequestMapping("/api")
 public class PersonController {
 
-	private PersonServiceDb PersonServiceDb;
-	private UserServiceDb userServiceDb;
+	private PersonServiceDb personServiceDb;
+	private ClientServiceDb clientServiceDb;
 
-	@Autowired
-	public PersonController(PersonServiceDb personServiceDb, UserServiceDb userServiceDb) {
-		this.PersonServiceDb = personServiceDb;
-		this.userServiceDb = userServiceDb;
+	private SecurityUtilities securityUtilities;
+
+	public PersonController(PersonServiceDb personServiceDb, ClientServiceDb clientServiceDb, SecurityUtilities securityUtilities) {
+		this.personServiceDb = personServiceDb;
+		this.clientServiceDb = clientServiceDb;
+		this.securityUtilities = securityUtilities;
 	}
 
-	/*
-	@GetMapping()
-	public @ResponseBody String checkClient(@RequestParam("name") String name)
+	@GetMapping("/check")
+	public @ResponseBody Person checkPerson(@RequestParam("name") String name)
 	{
-		Optional<Person> optionalClient = PersonServiceDb.findPersonByName(name);
-		if (optionalClient.isPresent())
-			return optionalClient.get().toString();
-		else
-			return "Client Not found";
-	}
-*/
-	/*
-	@PostMapping("/save")
-	public @ResponseBody String saveClient(@PathParam("name") String name)
-	{
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (!auth.isAuthenticated())
-			return "User not Authenticated !";
-		String username = auth.getPrincipal().toString();
-		Client client = new Client();
-		client.setName(name);
-		client.setTotalElapsedTime(10.0);
-		client.setTotalPressTime(4.0);
-		userServiceDb.addClientToUser(username, client);
-		return "Client saved !";
-	}
-	*/
+		Client authenticatedClient;
+		Person person;
 
-	/*
-	@GetMapping("/save")
-	public String showSaveClient(Model model)
-	{
-		//if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken))
-		//	return "index";
-		model.addAttribute("client", new Person());
-		return "saveclient";
+		authenticatedClient = securityUtilities.getAuthenticatedClient();
+		if (authenticatedClient == null)
+			return null;
+		return authenticatedClient.personExist(name);
 	}
 
 	@PostMapping("/save")
-	public String saveClient(@ModelAttribute("client") Person person, BindingResult bindingResult)
+	public @ResponseBody String savePerson(@RequestBody Person person)
 	{
-		if (bindingResult.hasErrors())
-			return "index";
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (!auth.isAuthenticated())
-			return "User not Authenticated !";
-		PersonServiceDb.save(person);
-		String username = ((UserDetails)auth.getPrincipal()).getUsername();
-		userServiceDb.addClientToUser(username, person);
-		return "dashboard";
+		Client authenticatedClient;
+
+		authenticatedClient = securityUtilities.getAuthenticatedClient();
+		if (authenticatedClient == null)
+			return "Client Not Authenticated !";
+		if (authenticatedClient.personExist(person.getName()) != null)
+			return "Person Already exist !";
+		authenticatedClient.getPersons().add(person);
+		clientServiceDb.update(authenticatedClient);
+		return "Person Saved !";
 	}
 
-	 */
+	@PostMapping("/update")
+	public @ResponseBody String updatePerson(@RequestBody Person person)
+	{
+		Client authenticatedClient;
+		Person oldPerson;
+
+		authenticatedClient = securityUtilities.getAuthenticatedClient();
+		if (authenticatedClient == null)
+			return "Client Not Authenticated !";
+		if ((oldPerson = authenticatedClient.personExist(person.getName())) == null)
+			return "Person doesn't exist !";
+		person.setId(oldPerson.getId());
+		personServiceDb.update(person);
+		return "Person Updated Successfully !";
+	}
+
+	@DeleteMapping("/delete")
+	public @ResponseBody Person deletePerson(@RequestParam("name") String name)
+	{
+		Client authenticatedClient;
+		Person person;
+
+		authenticatedClient = securityUtilities.getAuthenticatedClient();
+		if (authenticatedClient == null)
+			return null;
+		if ((person = authenticatedClient.personExist(name)) == null)
+			return null;
+		authenticatedClient.getPersons().remove(person);
+		personServiceDb.delete(person);
+		clientServiceDb.update(authenticatedClient);
+		return person;
+	}
 }

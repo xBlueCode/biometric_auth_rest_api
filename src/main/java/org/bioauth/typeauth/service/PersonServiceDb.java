@@ -26,4 +26,14 @@ public class PersonServiceDb implements PersonService {
 	public void save(Person person) {
 		personRepository.save(person);
 	}
+
+	@Override
+	public void update(Person person) {
+		personRepository.saveAndFlush(person);
+	}
+
+	@Override
+	public void delete(Person person) {
+		personRepository.delete(person);
+	}
 }

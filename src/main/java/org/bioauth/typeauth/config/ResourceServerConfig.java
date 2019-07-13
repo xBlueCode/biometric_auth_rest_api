@@ -35,11 +35,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		//super.configure(http);
 
-		http.authorizeRequests().antMatchers("/login", "/register").permitAll()
-		.antMatchers("/help").permitAll()
-		.anyRequest().authenticated()
-		.and()
-		.formLogin()
+		http.authorizeRequests()
+				.antMatchers("/login", "/register").permitAll()
+				.antMatchers("/swagger*").permitAll()
+				.antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
+				.permitAll()
+				.anyRequest().authenticated()
+				.and()
+				.formLogin()
 		//http
 				//.authorizeRequests()
 				//.antMatchers("/oauth/*").permitAll()

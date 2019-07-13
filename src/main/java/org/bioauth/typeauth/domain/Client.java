@@ -64,6 +64,13 @@ public class Client implements ClientDetails {
 	)
 	private Set<ResourceId> resIds = new HashSet<>();
 
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+			joinColumns = @JoinColumn(name = "CLIENT_ID"),
+			inverseJoinColumns = @JoinColumn(name = "PERSON_ID")
+	)
+	private List<Person> persons = new ArrayList<>();
+
 	public Client(@NotEmpty String clientId, @NotEmpty @Length(min = 4) String clientSecret, Set<Scope> scopes, Set<AuthGrantType> authGrantTypes, @NotNull Integer accessTokenValiditySeconds, Set<GrantedAuthorityClient> grantedAuthorities, Set<ResourceId> resIds) {
 		this.clientId = clientId;
 		this.clientSecret = clientSecret;
@@ -132,5 +139,18 @@ public class Client implements ClientDetails {
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
 		return Collections.emptySet();
+	}
+
+	public Person personExist(String personName)
+	{
+		int index = persons.stream()
+				.map(Person::getName)
+				.collect(Collectors.toList()
+				)
+				.indexOf(personName);
+		if (index > -1)
+			return persons.get(index);
+		else
+			return null;
 	}
 }

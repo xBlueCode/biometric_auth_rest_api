@@ -8,8 +8,13 @@ spring:
   jpa:
     properties:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+      hibernate:
+        jdbc:
+          time_zone: +03:00
     hibernate:
       ddl-auto: update
+    database: mysql
+
 security:
   oauth2:
     resource:

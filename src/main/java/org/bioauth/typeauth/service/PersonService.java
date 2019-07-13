@@ -11,4 +11,6 @@ public interface PersonService {
 	Optional<Person> findPersonByName(String name);
 
 	void save(Person person);
+	void delete(Person person);
+	void update(Person person);
 }
