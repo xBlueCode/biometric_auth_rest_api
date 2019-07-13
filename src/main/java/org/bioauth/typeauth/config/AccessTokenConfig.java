@@ -34,5 +34,4 @@ public class AccessTokenConfig {
 		//defaultTokenServices.setSupportRefreshToken(true);
 		return defaultTokenServices;
 	}
-
 }
