@@ -15,5 +15,4 @@ public interface UserService extends UserDetailsService {
 	//void delete(User user);
 	void update(User user);
 	Optional<User> findUserByUsername(String username);
-	//void addClientToUser(String username, Person person);
 }

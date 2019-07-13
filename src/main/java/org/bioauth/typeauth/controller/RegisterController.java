@@ -38,15 +38,4 @@ public class RegisterController {
 		userServiceMySql.save(user);
 		return "login";
 	}
-
-	/*
-	@RequestMapping(method = RequestMethod.POST)
-	public void registerUser(@PathParam("username") String username, @PathParam("pass") String pass) {
-		User newUser = new User();
-		newUser.setUsername(username);
-		newUser.setPassword(pass);
-		userServiceMySql.save(newUser);
-	}
-	 */
-
 }

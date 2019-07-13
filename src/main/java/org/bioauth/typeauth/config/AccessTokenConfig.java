@@ -6,17 +6,14 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.stereotype.Component;
 
 @Configuration
-//@Component
 public class AccessTokenConfig {
 
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter()
 	{
 		JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-		//accessTokenConverter.setSigningKey("bio");
 		return accessTokenConverter;
 	}
 

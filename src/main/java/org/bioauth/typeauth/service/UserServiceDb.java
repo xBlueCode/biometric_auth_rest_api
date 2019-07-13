@@ -29,12 +29,7 @@ public class UserServiceDb implements UserService {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
-/*
-	@Override
-	public void delete(User user) {
-		repoUser.delete(user);
-	}
-*/
+
 	@Override
 	public void update(User user) {
 		userRepository.saveAndFlush(user);

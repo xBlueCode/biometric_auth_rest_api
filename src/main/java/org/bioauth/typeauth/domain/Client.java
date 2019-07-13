@@ -6,8 +6,6 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.stereotype.Component;
-import springfox.documentation.service.GrantType;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -18,7 +16,6 @@ import java.util.stream.Collectors;
 @Entity
 @Data
 @NoArgsConstructor
-//@Table(name = "client")
 public class Client implements ClientDetails {
 
 	@Id
