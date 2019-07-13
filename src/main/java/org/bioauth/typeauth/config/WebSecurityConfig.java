@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	SimpleUrlAuthenticationSuccessHandler successHandler()
 	{
 		SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
-		successHandler.setDefaultTargetUrl("/dashboard");
+		//successHandler.setDefaultTargetUrl("/dashboard");
 		return successHandler;
 	}
 

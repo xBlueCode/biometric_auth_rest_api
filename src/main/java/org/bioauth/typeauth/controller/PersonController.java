@@ -1,6 +1,6 @@
 package org.bioauth.typeauth.controller;
 
-import org.bioauth.typeauth.config.SecurityUtilities;
+import org.bioauth.typeauth.config.ClientSecurityUtil;
 import org.bioauth.typeauth.domain.Client;
 import org.bioauth.typeauth.domain.Person;
 import org.bioauth.typeauth.service.ClientServiceDb;
@@ -15,21 +15,20 @@ public class PersonController {
 	private PersonServiceDb personServiceDb;
 	private ClientServiceDb clientServiceDb;
 
-	private SecurityUtilities securityUtilities;
+	private ClientSecurityUtil clientSecurityUtil;
 
-	public PersonController(PersonServiceDb personServiceDb, ClientServiceDb clientServiceDb, SecurityUtilities securityUtilities) {
+	public PersonController(PersonServiceDb personServiceDb, ClientServiceDb clientServiceDb, ClientSecurityUtil clientSecurityUtil) {
 		this.personServiceDb = personServiceDb;
 		this.clientServiceDb = clientServiceDb;
-		this.securityUtilities = securityUtilities;
+		this.clientSecurityUtil = clientSecurityUtil;
 	}
 
 	@GetMapping("/check")
 	public @ResponseBody Person checkPerson(@RequestParam("name") String name)
 	{
 		Client authenticatedClient;
-		Person person;
 
-		authenticatedClient = securityUtilities.getAuthenticatedClient();
+		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
 		if (authenticatedClient == null)
 			return null;
 		return authenticatedClient.personExist(name);
@@ -40,7 +39,7 @@ public class PersonController {
 	{
 		Client authenticatedClient;
 
-		authenticatedClient = securityUtilities.getAuthenticatedClient();
+		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
 		if (authenticatedClient == null)
 			return "Client Not Authenticated !";
 		if (authenticatedClient.personExist(person.getName()) != null)
@@ -56,7 +55,7 @@ public class PersonController {
 		Client authenticatedClient;
 		Person oldPerson;
 
-		authenticatedClient = securityUtilities.getAuthenticatedClient();
+		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
 		if (authenticatedClient == null)
 			return "Client Not Authenticated !";
 		if ((oldPerson = authenticatedClient.personExist(person.getName())) == null)
@@ -72,7 +71,7 @@ public class PersonController {
 		Client authenticatedClient;
 		Person person;
 
-		authenticatedClient = securityUtilities.getAuthenticatedClient();
+		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
 		if (authenticatedClient == null)
 			return null;
 		if ((person = authenticatedClient.personExist(name)) == null)

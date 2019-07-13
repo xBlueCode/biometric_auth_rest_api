@@ -8,12 +8,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SecurityUtilities {
+public class ClientSecurityUtil {
 
 	private ClientServiceDb clientServiceDb;
 
 	@Autowired
-	public SecurityUtilities(ClientServiceDb clientServiceDb) {
+	public ClientSecurityUtil(ClientServiceDb clientServiceDb) {
 		this.clientServiceDb = clientServiceDb;
 	}
 
