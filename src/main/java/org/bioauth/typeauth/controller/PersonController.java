@@ -81,4 +81,24 @@ public class PersonController {
 		clientServiceDb.update(authenticatedClient);
 		return person;
 	}
+
+	@GetMapping("/verify")
+	public @ResponseBody String verify(@RequestBody Person newPerson)
+	{
+		Client authenticatedClient;
+		Person person;
+
+		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
+		if (authenticatedClient == null)
+			return "Client not authenticated !";
+		if ((person = authenticatedClient.personExist(newPerson.getName())) == null)
+			return "Person not found !";
+		Double score1 = 100
+				* Math.min(person.getTotalElapsedTime(), newPerson.getTotalElapsedTime())
+				/ Math.max(person.getTotalElapsedTime(), newPerson.getTotalElapsedTime());
+		Double score2 = 100
+				* Math.min(person.getTotalPressTime(), newPerson.getTotalPressTime())
+				/ Math.max(person.getTotalPressTime(), newPerson.getTotalPressTime());
+		return String.format("Result:\nSimilarity: %.2f %%\nKey Similarity: %.2f %%\n", score1, score2);
+	}
 }
