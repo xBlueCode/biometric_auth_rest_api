@@ -8,7 +8,7 @@ import java.util.Optional;
 @Service
 public interface PersonService {
 
-	Optional<Person> findPersonByName(String name);
+	Person findPersonByName(String name);
 
 	void save(Person person);
 	void delete(Person person);

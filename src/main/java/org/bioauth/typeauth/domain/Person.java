@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Data
 @NoArgsConstructor
-public class Person {
+public class Person{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +26,14 @@ public class Person {
 
 	@NotNull
 	private Double totalElapsedTime;
+
+	public Person copy()
+	{
+		Person person = new Person();
+		person.setId(id);
+		person.setName(name);
+		person.setTotalElapsedTime(totalElapsedTime);
+		person.setTotalPressTime(totalPressTime);
+		return person;
+	}
 }

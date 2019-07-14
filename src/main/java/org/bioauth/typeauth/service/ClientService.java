@@ -9,5 +9,5 @@ public interface ClientService extends ClientDetailsService {
 
 	Client save(Client client);
 	void delete(Client client);
-	void update(Client client);
+	Client update(Client client);
 }

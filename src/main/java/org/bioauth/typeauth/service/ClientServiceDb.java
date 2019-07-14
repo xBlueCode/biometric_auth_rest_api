@@ -32,8 +32,8 @@ public class ClientServiceDb implements ClientService {
 	}
 
 	@Override
-	public void update(Client client) {
-		clientRepository.saveAndFlush(client);
+	public Client update(Client client) {
+		return clientRepository.saveAndFlush(client);
 	}
 
 	@Override
