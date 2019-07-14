@@ -1,12 +1,22 @@
 package org.bioauth.typeauth.controller;
 
+import javassist.NotFoundException;
 import org.bioauth.typeauth.config.ClientSecurityUtil;
 import org.bioauth.typeauth.domain.Client;
 import org.bioauth.typeauth.domain.Person;
+import org.bioauth.typeauth.exception.ClientNotAuthenticatedException;
+import org.bioauth.typeauth.exception.PersonExistException;
+import org.bioauth.typeauth.exception.PersonNotFoundException;
 import org.bioauth.typeauth.service.ClientServiceDb;
 import org.bioauth.typeauth.service.PersonServiceDb;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping("/api")
@@ -24,81 +34,113 @@ public class PersonController {
 	}
 
 	@GetMapping("/check")
-	public @ResponseBody Person checkPerson(@RequestParam("name") String name)
+	public ResponseEntity<?> checkPerson(@RequestParam("name") String name)
 	{
 		Client authenticatedClient;
+		Person person;
+		HashMap<String, Object> body = new HashMap<>();
 
 		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
 		if (authenticatedClient == null)
-			return null;
-		return authenticatedClient.personExist(name);
+			throw new ClientNotAuthenticatedException("anonymous");
+		if ((person = authenticatedClient.personExist(name)) == null)
+			throw new PersonNotFoundException(name);
+
+		body.put("status", HttpStatus.FOUND);
+		body.put("person", person);
+		return new ResponseEntity<>(body, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/save")
-	public @ResponseBody String savePerson(@RequestBody Person person)
+	public ResponseEntity<?> savePerson(@RequestBody Person person)
 	{
 		Client authenticatedClient;
+		HashMap<String, Object> body = new HashMap<>();
 
 		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
 		if (authenticatedClient == null)
-			return "Client Not Authenticated !";
+			throw new ClientNotAuthenticatedException("anonymous");
 		if (authenticatedClient.personExist(person.getName()) != null)
-			return "Person Already exist !";
+			throw new PersonExistException(person.getName());
 		authenticatedClient.getPersons().add(person);
 		clientServiceDb.update(authenticatedClient);
-		return "Person Saved !";
+		person.setId(personServiceDb.findPersonByName(person.getName()).getId());
+
+		body.put("status", HttpStatus.CREATED);
+		body.put("person", person);
+		return new ResponseEntity<>(body, HttpStatus.CREATED);
 	}
 
-	@PostMapping("/update")
-	public @ResponseBody String updatePerson(@RequestBody Person person)
+	@PutMapping("/update")
+	public ResponseEntity<?> updatePerson(@RequestBody Person person)
 	{
 		Client authenticatedClient;
 		Person oldPerson;
+		HashMap<String, Object> body = new HashMap<>();
 
 		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
 		if (authenticatedClient == null)
-			return "Client Not Authenticated !";
+			throw new ClientNotAuthenticatedException("anonymous");
 		if ((oldPerson = authenticatedClient.personExist(person.getName())) == null)
-			return "Person doesn't exist !";
+			throw  new PersonNotFoundException(person.getName());
+
 		person.setId(oldPerson.getId());
+		oldPerson = oldPerson.copy();
 		personServiceDb.update(person);
-		return "Person Updated Successfully !";
+
+		body.put("status", HttpStatus.OK);
+		body.put("old", oldPerson);
+		body.put("new", person);
+		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete")
-	public @ResponseBody Person deletePerson(@RequestParam("name") String name)
+	public ResponseEntity<?> deletePerson(@RequestParam("name") String name)
 	{
 		Client authenticatedClient;
 		Person person;
+		HashMap<String, Object> body = new HashMap<>();
 
 		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
 		if (authenticatedClient == null)
-			return null;
+			throw new ClientNotAuthenticatedException("anonymous");
 		if ((person = authenticatedClient.personExist(name)) == null)
-			return null;
+			throw new PersonNotFoundException(name);
+
 		authenticatedClient.getPersons().remove(person);
 		personServiceDb.delete(person);
 		clientServiceDb.update(authenticatedClient);
-		return person;
+
+		body.put("status", HttpStatus.OK);
+		body.put("action", "deleted");
+		body.put("person", person);
+		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 
 	@GetMapping("/verify")
-	public @ResponseBody String verify(@RequestBody Person newPerson)
+	public ResponseEntity<?> verify(@RequestBody Person newPerson)
 	{
 		Client authenticatedClient;
 		Person person;
+		HashMap<String, Object> body = new HashMap<>();
 
 		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
 		if (authenticatedClient == null)
-			return "Client not authenticated !";
+			throw new ClientNotAuthenticatedException("anonymous");
 		if ((person = authenticatedClient.personExist(newPerson.getName())) == null)
-			return "Person not found !";
+			throw new PersonNotFoundException(newPerson.getName());
+
 		Double score1 = 100
 				* Math.min(person.getTotalElapsedTime(), newPerson.getTotalElapsedTime())
 				/ Math.max(person.getTotalElapsedTime(), newPerson.getTotalElapsedTime());
 		Double score2 = 100
 				* Math.min(person.getTotalPressTime(), newPerson.getTotalPressTime())
 				/ Math.max(person.getTotalPressTime(), newPerson.getTotalPressTime());
-		return String.format("Result:\nSimilarity: %.2f %%\nKey Similarity: %.2f %%\n", score1, score2);
+		body.put("status", HttpStatus.OK);
+		body.put("person", person);
+		body.put("score_tet", score1.intValue());
+		body.put("score_tpt", score2.intValue());
+
+		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 }
