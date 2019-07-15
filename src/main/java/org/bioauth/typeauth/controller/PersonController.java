@@ -2,8 +2,10 @@ package org.bioauth.typeauth.controller;
 
 import org.bioauth.typeauth.config.ClientSecurityUtil;
 import org.bioauth.typeauth.domain.Client;
+import org.bioauth.typeauth.domain.Field;
 import org.bioauth.typeauth.domain.Person;
 import org.bioauth.typeauth.exception.ClientNotAuthenticatedException;
+import org.bioauth.typeauth.exception.FieldNotFoundException;
 import org.bioauth.typeauth.exception.PersonExistException;
 import org.bioauth.typeauth.exception.PersonNotFoundException;
 import org.bioauth.typeauth.service.ClientServiceDb;
@@ -13,7 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api")
@@ -61,6 +66,7 @@ public class PersonController {
 		return new ResponseEntity<>(body, HttpStatus.CREATED);
 	}
 
+	/*
 	@PutMapping("/update")
 	public ResponseEntity<?> updatePerson(@RequestBody Person person)
 	{
@@ -77,6 +83,7 @@ public class PersonController {
 		body.put("new", person);
 		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
+	*/
 
 	@DeleteMapping("/delete")
 	public ResponseEntity<?> deletePerson(@RequestParam("name") String name)
@@ -100,19 +107,38 @@ public class PersonController {
 	{
 		Person person = getValidPersonByName(newPerson.getName());
 		HashMap<String, Object> body = new HashMap<>();
-
+/*
 		Double score1 = 100
 				* Math.min(person.getTotalElapsedTime(), newPerson.getTotalElapsedTime())
 				/ Math.max(person.getTotalElapsedTime(), newPerson.getTotalElapsedTime());
 		Double score2 = 100
 				* Math.min(person.getTotalPressTime(), newPerson.getTotalPressTime())
 				/ Math.max(person.getTotalPressTime(), newPerson.getTotalPressTime());
+
+ */
+/*
 		body.put("status", HttpStatus.OK);
 		body.put("action", "verified");
 		body.put("person", person);
 		body.put("score_tet", score1.intValue());
 		body.put("score_tpt", score2.intValue());
 
+ */
+		ArrayList<Object> scores = new ArrayList<>();
+
+		ArrayList<String> fieldnames = (ArrayList<String>) person.getFields().stream()
+				.map(Field::getName).collect(Collectors.toList());
+
+		for (Field newField : newPerson.getFields())
+		{
+			if (!fieldnames.contains(newField.getName()))
+				throw new FieldNotFoundException(newField.getName());
+			scores.add(newField.getScore(person.getFields().get(fieldnames.indexOf(newField.getName()))));
+		}
+		body.put("status", HttpStatus.OK);
+		body.put("action", "verified");
+		body.put("person", person);
+		body.put("scores", scores);
 		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 
@@ -120,7 +146,6 @@ public class PersonController {
 	{
 		Client authenticatedClient;
 		Person person;
-		HashMap<String, Object> body = new HashMap<>();
 
 		authenticatedClient = clientSecurityUtil.getAuthenticatedClient();
 		if (authenticatedClient == null)

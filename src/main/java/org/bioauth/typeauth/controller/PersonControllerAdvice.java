@@ -2,6 +2,7 @@ package org.bioauth.typeauth.controller;
 
 import javassist.NotFoundException;
 import org.bioauth.typeauth.exception.ClientNotAuthenticatedException;
+import org.bioauth.typeauth.exception.FieldNotFoundException;
 import org.bioauth.typeauth.exception.PersonExistException;
 import org.bioauth.typeauth.exception.PersonNotFoundException;
 import org.springframework.hateoas.VndErrors;
@@ -34,6 +35,12 @@ public class PersonControllerAdvice {
 	public ResponseEntity<?> handleClientNotAuthenticatedException(final ClientNotAuthenticatedException excep)
 	{
 		return error(excep, HttpStatus.UNAUTHORIZED, excep.getClientId());
+	}
+
+	@ExceptionHandler(FieldNotFoundException.class)
+	public ResponseEntity<?> handleFieldNotFoundException(final FieldNotFoundException excep)
+	{
+		return error(excep, HttpStatus.NOT_FOUND, excep.getName());
 	}
 
 	private ResponseEntity<?> error
