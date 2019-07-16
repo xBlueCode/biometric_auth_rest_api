@@ -7,7 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Entity
@@ -30,22 +32,22 @@ public class Person{
 	)
 	private List<Field> fields = new ArrayList<>();
 
-	/*
-	@NotNull
-	private Double totalPressTime;
-
-	@NotNull
-	private Double totalElapsedTime;
-*/
-	/*
-	public Person copy()
+	public void updateFields(ArrayList<Field> newFields)
 	{
-		Person person = new Person();
-		person.setId(id);
-		person.setName(name);
-		person.setTotalElapsedTime(totalElapsedTime);
-		person.setTotalPressTime(totalPressTime);
-		return person;
+		ArrayList<String> fieldnames = (ArrayList<String>) fields.stream()
+				.map(Field::getName).collect(Collectors.toList());
+
+		for (Field newField : newFields)
+		{
+			if (!fieldnames.contains(newField.getName()))
+				fields.add(newField);
+			else
+			{
+				System.out.println(newField.getName());
+				int i = fieldnames.indexOf(newField.getName());
+				newField.setId(fields.get(i).getId());
+				fields.set(i, newField);
+			}
+		}
 	}
-	 */
 }

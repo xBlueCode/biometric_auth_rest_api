@@ -43,6 +43,12 @@ public class PersonControllerAdvice {
 		return error(excep, HttpStatus.NOT_FOUND, excep.getName());
 	}
 
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<?> handleException(final Exception excep)
+	{
+		return error(excep, HttpStatus.BAD_REQUEST, "bad_request");
+	}
+
 	private ResponseEntity<?> error
 			(final Exception excep, final HttpStatus httpStatus, final String logRef)
 	{
