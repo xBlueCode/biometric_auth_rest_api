@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,42 +36,33 @@ public class Person{
 			joinColumns = @JoinColumn(name = "PERSON_ID"),
 			inverseJoinColumns = @JoinColumn(name = "FIELD_ID")
 	)
-	@Column(table = "field_phone")
-	private List<Field> fieldsPhone = new ArrayList<>();
+	@Column(table = "field_mobile")
+	private List<Field> fieldsMobile = new ArrayList<>();
 
 	public void updateFieldsDesktop(ArrayList<Field> newFields)
 	{
-		ArrayList<String> fieldnames = (ArrayList<String>) fieldsDesktop.stream()
-				.map(Field::getName).collect(Collectors.toList());
-
-		for (Field newField : newFields)
-		{
-			if (!fieldnames.contains(newField.getName()))
-				fieldsDesktop.add(newField);
-			else
-			{
-				System.out.println(newField.getName());
-				int i = fieldnames.indexOf(newField.getName());
-				newField.setId(fieldsDesktop.get(i).getId());
-				fieldsDesktop.set(i, newField);
-			}
-		}
+		updateFields(this.fieldsDesktop, newFields);
 	}
+
 	public void updateFieldsPhone(ArrayList<Field> newFields)
 	{
-		ArrayList<String> fieldnames = (ArrayList<String>) fieldsPhone.stream()
+		updateFields(this.fieldsMobile, newFields);
+	}
+
+	private void updateFields(List<Field> fields, ArrayList<Field> newFields)
+	{
+		ArrayList<String> fieldnames = (ArrayList<String>) fields.stream()
 				.map(Field::getName).collect(Collectors.toList());
 
 		for (Field newField : newFields)
 		{
 			if (!fieldnames.contains(newField.getName()))
-				fieldsPhone.add(newField);
+				fields.add(newField);
 			else
 			{
-				System.out.println(newField.getName());
 				int i = fieldnames.indexOf(newField.getName());
-				newField.setId(fieldsPhone.get(i).getId());
-				fieldsPhone.set(i, newField);
+				newField.setId(fields.get(i).getId());
+				fields.set(i, newField);
 			}
 		}
 	}

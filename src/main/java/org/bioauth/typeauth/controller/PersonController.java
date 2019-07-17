@@ -72,7 +72,7 @@ public class PersonController {
 		HashMap<String, Object> body = new HashMap<>();
 
 		oldPerson.updateFieldsDesktop((ArrayList<Field>) person.getFieldsDesktop());
-		oldPerson.updateFieldsPhone((ArrayList<Field>) person.getFieldsPhone());
+		oldPerson.updateFieldsPhone((ArrayList<Field>) person.getFieldsMobile());
 		personServiceDb.update(oldPerson);
 
 		body.put("status", HttpStatus.OK);
@@ -116,14 +116,14 @@ public class PersonController {
 		}
 
 		ArrayList<Object> scoresPhone = new ArrayList<>();
-		ArrayList<String> fieldnamesPhone = (ArrayList<String>) person.getFieldsPhone().stream()
+		ArrayList<String> fieldnamesPhone = (ArrayList<String>) person.getFieldsMobile().stream()
 				.map(Field::getName).collect(Collectors.toList());
 
-		for (Field newField : newPerson.getFieldsPhone())
+		for (Field newField : newPerson.getFieldsMobile())
 		{
 			if (!fieldnamesPhone.contains(newField.getName()))
 				throw new FieldNotFoundException(newField.getName());
-			scoresPhone.add(newField.getScore(person.getFieldsPhone().get(fieldnamesPhone.indexOf(newField.getName()))));
+			scoresPhone.add(newField.getScore(person.getFieldsMobile().get(fieldnamesPhone.indexOf(newField.getName()))));
 		}
 		body.put("status", HttpStatus.OK);
 		body.put("action", "verified");
