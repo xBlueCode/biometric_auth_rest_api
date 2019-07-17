@@ -30,23 +30,50 @@ public class Person{
 			joinColumns = @JoinColumn(name = "PERSON_ID"),
 			inverseJoinColumns = @JoinColumn(name = "FIELD_ID")
 	)
-	private List<Field> fields = new ArrayList<>();
+	@Column(table = "field_desktop")
+	private List<Field> fieldsDesktop = new ArrayList<>();
 
-	public void updateFields(ArrayList<Field> newFields)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+			joinColumns = @JoinColumn(name = "PERSON_ID"),
+			inverseJoinColumns = @JoinColumn(name = "FIELD_ID")
+	)
+	@Column(table = "field_phone")
+	private List<Field> fieldsPhone = new ArrayList<>();
+
+	public void updateFieldsDesktop(ArrayList<Field> newFields)
 	{
-		ArrayList<String> fieldnames = (ArrayList<String>) fields.stream()
+		ArrayList<String> fieldnames = (ArrayList<String>) fieldsDesktop.stream()
 				.map(Field::getName).collect(Collectors.toList());
 
 		for (Field newField : newFields)
 		{
 			if (!fieldnames.contains(newField.getName()))
-				fields.add(newField);
+				fieldsDesktop.add(newField);
 			else
 			{
 				System.out.println(newField.getName());
 				int i = fieldnames.indexOf(newField.getName());
-				newField.setId(fields.get(i).getId());
-				fields.set(i, newField);
+				newField.setId(fieldsDesktop.get(i).getId());
+				fieldsDesktop.set(i, newField);
+			}
+		}
+	}
+	public void updateFieldsPhone(ArrayList<Field> newFields)
+	{
+		ArrayList<String> fieldnames = (ArrayList<String>) fieldsPhone.stream()
+				.map(Field::getName).collect(Collectors.toList());
+
+		for (Field newField : newFields)
+		{
+			if (!fieldnames.contains(newField.getName()))
+				fieldsPhone.add(newField);
+			else
+			{
+				System.out.println(newField.getName());
+				int i = fieldnames.indexOf(newField.getName());
+				newField.setId(fieldsPhone.get(i).getId());
+				fieldsPhone.set(i, newField);
 			}
 		}
 	}

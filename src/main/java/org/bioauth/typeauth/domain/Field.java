@@ -25,6 +25,9 @@ public class Field {
 	@NotEmpty
 	private String name;
 
+	@NotEmpty
+	private String pageId;
+
 	@NotNull
 	private Double totalElapsedTime;
 

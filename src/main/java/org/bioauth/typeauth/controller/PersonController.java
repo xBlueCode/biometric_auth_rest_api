@@ -71,7 +71,8 @@ public class PersonController {
 		Person oldPerson = getValidPersonByName(person.getName());
 		HashMap<String, Object> body = new HashMap<>();
 
-		oldPerson.updateFields((ArrayList<Field>) person.getFields());
+		oldPerson.updateFieldsDesktop((ArrayList<Field>) person.getFieldsDesktop());
+		oldPerson.updateFieldsPhone((ArrayList<Field>) person.getFieldsPhone());
 		personServiceDb.update(oldPerson);
 
 		body.put("status", HttpStatus.OK);
@@ -102,20 +103,33 @@ public class PersonController {
 	{
 		Person person = getValidPersonByName(newPerson.getName());
 		HashMap<String, Object> body = new HashMap<>();
-		ArrayList<Object> scores = new ArrayList<>();
-		ArrayList<String> fieldnames = (ArrayList<String>) person.getFields().stream()
+		ArrayList<Object> scoresDesktop = new ArrayList<>();
+
+		ArrayList<String> fieldnamesDesktop = (ArrayList<String>) person.getFieldsDesktop().stream()
 				.map(Field::getName).collect(Collectors.toList());
 
-		for (Field newField : newPerson.getFields())
+		for (Field newField : newPerson.getFieldsDesktop())
 		{
-			if (!fieldnames.contains(newField.getName()))
+			if (!fieldnamesDesktop.contains(newField.getName()))
 				throw new FieldNotFoundException(newField.getName());
-			scores.add(newField.getScore(person.getFields().get(fieldnames.indexOf(newField.getName()))));
+			scoresDesktop.add(newField.getScore(person.getFieldsDesktop().get(fieldnamesDesktop.indexOf(newField.getName()))));
+		}
+
+		ArrayList<Object> scoresPhone = new ArrayList<>();
+		ArrayList<String> fieldnamesPhone = (ArrayList<String>) person.getFieldsPhone().stream()
+				.map(Field::getName).collect(Collectors.toList());
+
+		for (Field newField : newPerson.getFieldsPhone())
+		{
+			if (!fieldnamesPhone.contains(newField.getName()))
+				throw new FieldNotFoundException(newField.getName());
+			scoresPhone.add(newField.getScore(person.getFieldsPhone().get(fieldnamesPhone.indexOf(newField.getName()))));
 		}
 		body.put("status", HttpStatus.OK);
 		body.put("action", "verified");
 		body.put("person", person);
-		body.put("scores", scores);
+		body.put("scores_desktop", scoresDesktop);
+		body.put("scores_phone", scoresPhone);
 		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 
