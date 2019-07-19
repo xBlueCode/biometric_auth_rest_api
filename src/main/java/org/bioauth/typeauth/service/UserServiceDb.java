@@ -39,18 +39,10 @@ public class UserServiceDb implements UserService {
 		return userRepository.findUserByUsername(username);
 	}
 
-	/*
 	@Override
-	public void addClientToUser(String username, Person person) {
-
-		Optional<User> opUser = userRepository.findUserByUsername(username);
-		if (!opUser.isPresent())
-			return;
-		User user = opUser.get();
-		user.getPeople().add(person);
-		userRepository.saveAndFlush(user);
+	public void delete(User user) {
+		userRepository.delete(user);
 	}
-	*/
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

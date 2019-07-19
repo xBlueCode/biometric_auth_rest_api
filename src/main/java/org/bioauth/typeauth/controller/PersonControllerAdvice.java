@@ -1,6 +1,5 @@
 package org.bioauth.typeauth.controller;
 
-import javassist.NotFoundException;
 import org.bioauth.typeauth.exception.ClientNotAuthenticatedException;
 import org.bioauth.typeauth.exception.FieldNotFoundException;
 import org.bioauth.typeauth.exception.PersonExistException;
