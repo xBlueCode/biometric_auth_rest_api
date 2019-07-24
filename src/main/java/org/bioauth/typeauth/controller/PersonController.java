@@ -72,7 +72,7 @@ public class PersonController {
 		HashMap<String, Object> body = new HashMap<>();
 
 		oldPerson.updateFieldsDesktop((ArrayList<Field>) person.getFieldsDesktop());
-		oldPerson.updateFieldsPhone((ArrayList<Field>) person.getFieldsMobile());
+		oldPerson.updateFieldsMobile((ArrayList<Field>) person.getFieldsMobile());
 		personServiceDb.update(oldPerson);
 
 		body.put("status", HttpStatus.OK);
@@ -115,21 +115,21 @@ public class PersonController {
 			scoresDesktop.add(newField.getScore(person.getFieldsDesktop().get(fieldnamesDesktop.indexOf(newField.getName()))));
 		}
 
-		ArrayList<Object> scoresPhone = new ArrayList<>();
-		ArrayList<String> fieldnamesPhone = (ArrayList<String>) person.getFieldsMobile().stream()
+		ArrayList<Object> scoresMobile = new ArrayList<>();
+		ArrayList<String> fieldnamesMobile = (ArrayList<String>) person.getFieldsMobile().stream()
 				.map(Field::getName).collect(Collectors.toList());
 
 		for (Field newField : newPerson.getFieldsMobile())
 		{
-			if (!fieldnamesPhone.contains(newField.getName()))
+			if (!fieldnamesMobile.contains(newField.getName()))
 				throw new FieldNotFoundException(newField.getName());
-			scoresPhone.add(newField.getScore(person.getFieldsMobile().get(fieldnamesPhone.indexOf(newField.getName()))));
+			scoresMobile.add(newField.getScore(person.getFieldsMobile().get(fieldnamesMobile.indexOf(newField.getName()))));
 		}
 		body.put("status", HttpStatus.OK);
 		body.put("action", "verified");
 		body.put("person", person);
 		body.put("scores_desktop", scoresDesktop);
-		body.put("scores_phone", scoresPhone);
+		body.put("scores_mobile", scoresMobile);
 		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 

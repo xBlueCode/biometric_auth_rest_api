@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/*
 @Component
 public class InitializerDb implements CommandLineRunner {
 
@@ -83,3 +84,4 @@ public class InitializerDb implements CommandLineRunner {
 		clientRepository.saveAndFlush(client1);
 	}
 }
+*/

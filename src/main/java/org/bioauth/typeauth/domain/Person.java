@@ -44,7 +44,7 @@ public class Person{
 		updateFields(this.fieldsDesktop, newFields);
 	}
 
-	public void updateFieldsPhone(ArrayList<Field> newFields)
+	public void updateFieldsMobile(ArrayList<Field> newFields)
 	{
 		updateFields(this.fieldsMobile, newFields);
 	}
